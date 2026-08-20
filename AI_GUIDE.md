@@ -5,6 +5,7 @@
 枝见是一个可静态部署的网页脑图编辑器。应用源码、仓库脑图、校验工具和 GitHub Pages 配置位于同一仓库。
 
 - `app/`：TypeScript/React 应用源码与脑图类型定义。
+- `app/lib/github-issues.ts`：GitHub Issue 清单、评论版本与脑图载荷解析规则。
 - `public/mindmaps/`：可被网页直接读取的脑图 JSON。
 - `scripts/validate-mindmaps.mjs`：统一校验脑图清单、结构、ID 和 LaTeX。
 - `static/`、`vite.pages.config.ts`：GitHub Pages 静态入口与构建配置。
@@ -127,6 +128,38 @@ npm run build:pages
 
 不要把密钥、令牌、邮箱、私人笔记或其他个人信息放入脑图和仓库。
 
+## GitHub Issue 脑图规则
+
+- 个人脑图可存放在公开 Issue 中，不需要修改 `public/mindmaps/`。
+- Issue 必须由 `Zhaoiii` 创建，标题必须以 `[mindmap]` 开头，例如 `[mindmap] 资料分析`。
+- 初始版本放在 Issue 描述中；后续每个版本作为一条新评论。网页优先读取本人发布的最新合法评论。
+- JSON 前必须包含标记 `<!-- zhijian-mindmap:v1 -->`，并放入 `json` 代码块。字段结构、ID 和 LaTeX 转义规则与仓库脑图完全相同。
+- 创建 Issue 后建议锁定会话，使无写权限的用户不能评论；网页仍会再次校验评论作者并忽略其他账号。
+- Issue 位于公开仓库，禁止放入私人笔记、令牌、密钥或个人信息。
+- 前端不得加入 GitHub token、PAT、OAuth Client Secret 或私钥。修改 Issue 解析代码后必须运行 `npm run verify`。
+
+示例 Issue 评论：
+
+````markdown
+<!-- zhijian-mindmap:v1 -->
+
+```json
+{
+  "version": 1,
+  "id": "sample-map",
+  "title": "示例脑图",
+  "root": {
+    "id": "root",
+    "text": "中心主题",
+    "side": "center",
+    "color": "#2D3038",
+    "collapsed": false,
+    "children": []
+  }
+}
+```
+````
+
 ## 添加一张脑图
 
 1. 在 `public/mindmaps/` 新建 `new-map.json`。
@@ -134,6 +167,14 @@ npm run build:pages
 3. 在 `public/mindmaps/index.json` 添加清单记录。
 4. 运行脑图校验命令。
 5. 运行项目构建，确认公式和节点正常显示。
+
+## 添加或修改 Issue 脑图
+
+1. 按统一 JSON 结构生成完整脑图，不修改 `public/mindmaps/index.json`。
+2. 在内容前加入 `<!-- zhijian-mindmap:v1 -->`，并用 `json` 代码块包裹。
+3. 新脑图创建标题以 `[mindmap]` 开头的 Issue；修改现有脑图时发布到原 Issue 的新评论。
+4. 尽量保留已有节点 ID，并确认发布账号为 `Zhaoiii`。
+5. 重新打开网页中的 Issue 脑图，确认最新版本通过校验并正常渲染。
 
 ## 可直接交给 AI 的操作模板
 

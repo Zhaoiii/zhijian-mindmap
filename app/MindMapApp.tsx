@@ -13,8 +13,21 @@ import {
   validateRepositoryIndex,
 } from "./lib/mindmap";
 import type { MindMapDocument, MindMapNode, NodeSide, RepositoryMapEntry } from "./lib/mindmap";
+import {
+  createIssuePayload,
+  extractMindMapPayload,
+  GITHUB_OWNER,
+  issueCommentsApiUrl,
+  issueListApiUrl,
+  issueSaveUrl,
+  lastPageFromLink,
+  latestOwnerMindMap,
+  parseIssueMapEntry,
+} from "./lib/github-issues";
+import type { GitHubIssueMapEntry } from "./lib/github-issues";
 
 const STORAGE_KEY = "zhijian-mindmap-v1";
+const ISSUE_SOURCE_KEY = "zhijian-issue-source-v1";
 const PALETTE = ["#6758E8", "#10A793", "#E58A2D", "#2F80ED", "#D65780", "#7A62C7"];
 const LEVEL_X = 246;
 const ROW_Y = 102;
@@ -30,6 +43,22 @@ interface PositionedNode {
 }
 
 interface TransformState { x: number; y: number; scale: number }
+
+async function fetchGitHubApi(url: string): Promise<Response> {
+  const response = await fetch(url, {
+    headers: {
+      Accept: "application/vnd.github+json",
+      "X-GitHub-Api-Version": "2022-11-28",
+    },
+  });
+  if (response.ok) return response;
+  if (response.status === 403 && response.headers.get("X-RateLimit-Remaining") === "0") {
+    const resetAt = Number(response.headers.get("X-RateLimit-Reset")) * 1000;
+    const suffix = Number.isFinite(resetAt) ? `，约 ${new Date(resetAt).toLocaleTimeString()} 恢复` : "";
+    throw new Error(`GitHub 公开接口访问次数已用完${suffix}`);
+  }
+  throw new Error(`GitHub 请求失败（HTTP ${response.status}）`);
+}
 
 function visibleLeafCount(node: MindMapNode): number {
   if (node.collapsed || node.children.length === 0) return 1;
@@ -135,15 +164,23 @@ export function MindMapApp() {
   const [map, setMap] = useState<MindMapDocument>(() => createBlankMap());
   const [selectedId, setSelectedId] = useState("root");
   const [repositoryMaps, setRepositoryMaps] = useState<RepositoryMapEntry[]>([]);
+  const [issueMaps, setIssueMaps] = useState<GitHubIssueMapEntry[]>([]);
   const [activeRepositoryId, setActiveRepositoryId] = useState<string | null>(null);
+  const [activeIssueNumber, setActiveIssueNumber] = useState<number | null>(null);
   const [ready, setReady] = useState(false);
   const [saveStatus, setSaveStatus] = useState("正在载入…");
   const [toast, setToast] = useState<string | null>(null);
   const [transform, setTransform] = useState<TransformState>({ x: 0, y: 0, scale: 1 });
   const [leftOpen, setLeftOpen] = useState(false);
   const [rightOpen, setRightOpen] = useState(false);
+  const [leftCollapsed, setLeftCollapsed] = useState(false);
+  const [rightCollapsed, setRightCollapsed] = useState(false);
+  const [issuesBusy, setIssuesBusy] = useState(false);
+  const [issueListError, setIssueListError] = useState<string | null>(null);
+  const [issueDialogOpen, setIssueDialogOpen] = useState(false);
   const viewRef = useRef<HTMLDivElement>(null);
   const importRef = useRef<HTMLInputElement>(null);
+  const issuePayloadRef = useRef<HTMLTextAreaElement>(null);
   const dragRef = useRef<{ startX: number; startY: number; x: number; y: number } | null>(null);
   const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const positions = useMemo(() => layoutMindMap(map.root), [map.root]);
@@ -181,11 +218,70 @@ export function MindMapApp() {
       setMap(cloneMap(checked.data));
       setSelectedId(checked.data.root.id);
       setActiveRepositoryId(entry.id);
+      setActiveIssueNumber(null);
       setLeftOpen(false);
       setRightOpen(false);
       if (!silent) notify(`已打开「${entry.title}」`);
     } catch (error) {
       notify(`仓库脑图加载失败：${error instanceof Error ? error.message : "未知错误"}`);
+    }
+  }, [notify]);
+
+  const loadIssueMaps = useCallback(async (silent = false) => {
+    setIssuesBusy(true);
+    setIssueListError(null);
+    try {
+      const response = await fetchGitHubApi(issueListApiUrl());
+      const payload: unknown = await response.json();
+      if (!Array.isArray(payload)) throw new Error("GitHub Issue 清单格式不正确");
+      const entries = payload
+        .map(parseIssueMapEntry)
+        .filter((entry): entry is GitHubIssueMapEntry => Boolean(entry))
+        .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
+      setIssueMaps(entries);
+      if (!silent) notify(entries.length ? `已刷新 ${entries.length} 张 Issue 脑图` : "还没有 [mindmap] Issue 脑图");
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "未知错误";
+      setIssueListError(message);
+      if (!silent) notify(`Issue 清单读取失败：${message}`);
+    } finally {
+      setIssuesBusy(false);
+    }
+  }, [notify]);
+
+  const loadIssueMap = useCallback(async (entry: GitHubIssueMapEntry) => {
+    setIssuesBusy(true);
+    try {
+      const firstResponse = await fetchGitHubApi(issueCommentsApiUrl(entry.number));
+      const firstPage: unknown = await firstResponse.json();
+      const lastPage = lastPageFromLink(firstResponse.headers.get("Link"));
+      const pages = new Map<number, unknown>([[1, firstPage]]);
+      let checked = lastPage === 1
+        ? latestOwnerMindMap(firstPage)
+        : { ok: false as const, error: "正在查找最新脑图版本" };
+
+      for (let page = lastPage; page >= Math.max(1, lastPage - 4) && !checked.ok; page -= 1) {
+        if (!pages.has(page)) {
+          const response = await fetchGitHubApi(issueCommentsApiUrl(entry.number, page));
+          pages.set(page, await response.json() as unknown);
+        }
+        checked = latestOwnerMindMap(pages.get(page));
+      }
+
+      if (!checked.ok) checked = extractMindMapPayload(entry.body);
+      if (!checked.ok) throw new Error(checked.error);
+
+      setMap(cloneMap(checked.data));
+      setSelectedId(checked.data.root.id);
+      setActiveIssueNumber(entry.number);
+      setActiveRepositoryId(null);
+      setLeftOpen(false);
+      setRightOpen(false);
+      notify(`已打开 Issue #${entry.number}「${entry.title}」`);
+    } catch (error) {
+      notify(`Issue 脑图加载失败：${error instanceof Error ? error.message : "未知错误"}`);
+    } finally {
+      setIssuesBusy(false);
     }
   }, [notify]);
 
@@ -200,6 +296,8 @@ export function MindMapApp() {
           if (checked.ok) {
             setMap(checked.data);
             setSelectedId(checked.data.root.id);
+            const savedIssueNumber = Number(localStorage.getItem(ISSUE_SOURCE_KEY));
+            if (Number.isInteger(savedIssueNumber) && savedIssueNumber > 0) setActiveIssueNumber(savedIssueNumber);
             localLoaded = true;
           }
         }
@@ -229,6 +327,8 @@ export function MindMapApp() {
     return () => { cancelled = true; };
   }, [loadRepositoryMap, notify]);
 
+  useEffect(() => { queueMicrotask(() => void loadIssueMaps(true)); }, [loadIssueMaps]);
+
   useEffect(() => {
     if (!ready) return;
     const timer = setTimeout(() => {
@@ -242,6 +342,12 @@ export function MindMapApp() {
     }, 350);
     return () => clearTimeout(timer);
   }, [map, notify, ready]);
+
+  useEffect(() => {
+    if (!ready) return;
+    if (activeIssueNumber) localStorage.setItem(ISSUE_SOURCE_KEY, String(activeIssueNumber));
+    else localStorage.removeItem(ISSUE_SOURCE_KEY);
+  }, [activeIssueNumber, ready]);
 
   useEffect(() => {
     if (!ready) return;
@@ -342,11 +448,26 @@ export function MindMapApp() {
       setMap(cloneMap(checked.data));
       setSelectedId(checked.data.root.id);
       setActiveRepositoryId(null);
+      setActiveIssueNumber(null);
       notify(`已导入「${checked.data.title}」`);
     } catch (error) {
       notify(`导入失败，当前脑图未改变：${error instanceof Error ? error.message : "文件无法读取"}`);
     } finally {
       if (importRef.current) importRef.current.value = "";
+    }
+  };
+
+  const issuePayload = useMemo(() => createIssuePayload(map), [map]);
+  const issueTargetUrl = useMemo(() => issueSaveUrl(activeIssueNumber, map.title), [activeIssueNumber, map.title]);
+
+  const copyIssuePayload = async () => {
+    try {
+      await navigator.clipboard.writeText(issuePayload);
+      notify("脑图 JSON 已复制，请粘贴到 GitHub");
+    } catch {
+      issuePayloadRef.current?.focus();
+      issuePayloadRef.current?.select();
+      notify("自动复制失败，已选中文本，请手动复制");
     }
   };
 
@@ -415,18 +536,30 @@ export function MindMapApp() {
           <span className={saveStatus === "保存失败" ? "save-error" : ""}>● {saveStatus}</span>
         </div>
         <nav className="top-actions" aria-label="文件操作">
-          <button className="primary-action" onClick={() => { const fresh = createBlankMap(); setMap(fresh); setSelectedId(fresh.root.id); setActiveRepositoryId(null); }}>＋ 新建</button>
+          <button className="primary-action" onClick={() => { const fresh = createBlankMap(); setMap(fresh); setSelectedId(fresh.root.id); setActiveRepositoryId(null); setActiveIssueNumber(null); }}>＋ 新建</button>
           <button onClick={() => importRef.current?.click()}>导入</button>
           <button onClick={exportMap}>导出</button>
           <input ref={importRef} className="hidden-input" type="file" accept="application/json,.json" onChange={(event) => { const file = event.target.files?.[0]; if (file) void importMap(file); }} />
         </nav>
+        <div className="issue-controls"><button onClick={() => setIssueDialogOpen(true)}>保存到 Issue</button></div>
         <button className="mobile-panel-button" aria-label="打开节点编辑" onClick={() => setRightOpen(true)}>✎</button>
       </header>
 
-      <section className="workspace">
+      <section className={`workspace ${leftCollapsed ? "left-collapsed" : ""} ${rightCollapsed ? "right-collapsed" : ""}`}>
         <aside className={`left-panel ${leftOpen ? "mobile-open" : ""}`}>
+          <div className="desktop-panel-head"><span>脑图与大纲</span><button aria-label="收起左侧栏" onClick={() => setLeftCollapsed(true)}>‹</button></div>
           <div className="mobile-panel-head"><b>脑图与大纲</b><button onClick={() => setLeftOpen(false)}>×</button></div>
-          <p className="panel-label">仓库脑图</p>
+          <div className="panel-section-heading"><p className="panel-label">Issue 脑图</p><button disabled={issuesBusy} aria-label="刷新 Issue 脑图" onClick={() => void loadIssueMaps()}>{issuesBusy ? "…" : "↻"}</button></div>
+          <div className="repo-list issue-list">
+            {issueMaps.map((entry) => (
+              <button key={entry.number} className={`map-card ${activeIssueNumber === entry.number ? "active" : ""}`} disabled={issuesBusy} onClick={() => void loadIssueMap(entry)}>
+                <b>{entry.title}</b><small>Issue #{entry.number} · {new Date(entry.updatedAt).toLocaleDateString("zh-CN")}</small>
+              </button>
+            ))}
+            {!issueMaps.length && <p className="empty-hint">{issuesBusy ? "正在读取 Issue…" : issueListError ? `读取失败：${issueListError}` : "暂无 [mindmap] Issue"}</p>}
+          </div>
+          <p className="issue-source-note">只读取 @{GITHUB_OWNER} 创建和评论的有效脑图。</p>
+          <p className="panel-label">内置示例</p>
           <div className="repo-list">
             {repositoryMaps.map((entry) => (
               <button key={entry.id} className={`map-card ${activeRepositoryId === entry.id ? "active" : ""}`} onClick={() => void loadRepositoryMap(entry)}>
@@ -441,6 +574,8 @@ export function MindMapApp() {
         </aside>
 
         <section className="canvas-shell">
+          {leftCollapsed && <button className="panel-reopen-button reopen-left" aria-label="展开左侧栏" onClick={() => setLeftCollapsed(false)}>›</button>}
+          {rightCollapsed && <button className="panel-reopen-button reopen-right" aria-label="展开右侧栏" onClick={() => setRightCollapsed(false)}>‹</button>}
           <div className="canvas-top-actions">
             <button onClick={() => addChild("left")}>＋ 左分支</button>
             <button onClick={() => addChild("right")}>＋ 右分支</button>
@@ -500,6 +635,7 @@ export function MindMapApp() {
         </section>
 
         <aside className={`right-panel ${rightOpen ? "mobile-open" : ""}`}>
+          <div className="desktop-panel-head"><span>节点编辑</span><button aria-label="收起右侧栏" onClick={() => setRightCollapsed(true)}>›</button></div>
           <div className="mobile-panel-head"><b>节点编辑</b><button onClick={() => setRightOpen(false)}>×</button></div>
           <div className="editor-heading"><div><p className="panel-label">节点编辑</p><b>{selectedNode.side === "center" ? "中心主题" : selectedNode.id}</b></div><span className="node-side-badge">{selectedNode.side}</span></div>
           <label htmlFor="node-text">文字与 LaTeX</label>
@@ -528,6 +664,24 @@ export function MindMapApp() {
         </aside>
       </section>
       {(leftOpen || rightOpen) && <button className="mobile-backdrop" aria-label="关闭面板" onClick={() => { setLeftOpen(false); setRightOpen(false); }} />}
+      {issueDialogOpen && (
+        <div className="issue-modal-backdrop">
+          <section className="issue-modal" role="dialog" aria-modal="true" aria-labelledby="issue-dialog-title">
+            <div className="issue-modal-head"><div><p>GitHub Issue 版本</p><h2 id="issue-dialog-title">{activeIssueNumber ? `保存到 Issue #${activeIssueNumber}` : "创建 Issue 脑图"}</h2></div><button aria-label="关闭" onClick={() => setIssueDialogOpen(false)}>×</button></div>
+            <p className="issue-modal-guide">
+              {activeIssueNumber
+                ? "点击下方按钮后，把已复制内容粘贴为一条新评论并提交。每条评论就是一个可回溯版本。"
+                : "点击下方按钮后，把已复制内容粘贴到新 Issue 的描述中并创建。创建后建议锁定会话，只允许仓库所有者继续评论。"}
+            </p>
+            <textarea ref={issuePayloadRef} readOnly value={issuePayload} aria-label="待保存的脑图 JSON" />
+            <div className="issue-modal-actions">
+              <button onClick={() => void copyIssuePayload()}>复制 JSON</button>
+              <a href={issueTargetUrl} target="_blank" rel="noreferrer" onClick={() => void copyIssuePayload()}>复制并打开 GitHub</a>
+            </div>
+            <p className="issue-privacy-note">脑图会公开存放在仓库 Issue 中；网页不会获取或保存你的 GitHub 令牌。</p>
+          </section>
+        </div>
+      )}
       {toast && <div className="toast" role="status">{toast}</div>}
     </main>
   );
