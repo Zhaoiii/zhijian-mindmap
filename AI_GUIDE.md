@@ -1,31 +1,46 @@
 # AI 协作指南
 
-## 项目用途与结构
+## 项目用途与整体结构
 
-枝见是一个可静态部署的网页脑图编辑器。应用源码、仓库脑图、校验工具和 GitHub Pages 配置位于同一仓库。
+枝见是一个静态、只读的网页脑图浏览器。网页不编辑或保存内容；所有脑图源码都放在当前 GitHub 仓库中，由开发者或 AI 修改 JSON 后通过 GitHub Pages 发布。
 
-- `app/`：TypeScript/React 应用源码与脑图类型定义。
-- `app/lib/github-issues.ts`：GitHub Issue 清单、评论版本与脑图载荷解析规则。
-- `public/mindmaps/`：可被网页直接读取的脑图 JSON。
-- `scripts/validate-mindmaps.mjs`：统一校验脑图清单、结构、ID 和 LaTeX。
-- `static/`、`vite.pages.config.ts`：GitHub Pages 静态入口与构建配置。
-- `.github/workflows/deploy-pages.yml`：默认分支推送后的自动部署。
+- `app/`：TypeScript/React 浏览器源码与数据类型。
+- `app/lib/mindmap.ts`：脑图类型和浏览器运行时校验。
+- `public/mindmaps/`：唯一的脑图内容数据源。
+- `public/mindmaps/index.json`：网页启动时读取的脑图清单。
+- `scripts/validate-mindmaps.mjs`：清单、结构、ID、分支和 LaTeX 校验工具。
+- `.github/workflows/deploy-pages.yml`：推送默认分支后的自动部署流程。
 - `dist/`、`dist-pages/`、`.next/`：构建产物，禁止 AI 直接修改或提交。
 
-## 仓库脑图清单
+若用户只要求新增或修改脑图，不要修改 `app/`、构建配置或工作流。
 
-脑图文件全部位于 `public/mindmaps/`。`public/mindmaps/index.json` 是网页启动时读取的脑图清单。每个清单项包含：
+## 脑图目录与 index.json
+
+每张脑图对应 `public/mindmaps/` 中的一个独立 `.json` 文件。`public/mindmaps/index.json` 决定网页显示哪些脑图以及排列顺序：
 
 ```json
 {
-  "id": "data-analysis",
-  "title": "资料分析知识框架",
-  "file": "data-analysis.json",
-  "description": "公务员考试资料分析知识点与常用公式"
+  "maps": [
+    {
+      "id": "data-analysis",
+      "title": "资料分析知识框架",
+      "file": "data-analysis.json",
+      "description": "公务员考试资料分析知识点与常用公式"
+    }
+  ]
 }
 ```
 
-新增、改名或删除脑图文件时，必须同步更新 `index.json`。`file` 只能是当前目录下的 `.json` 文件名，不能包含路径跳转。
+清单字段：
+
+| 字段 | 规则 |
+| --- | --- |
+| `id` | 脑图的稳定唯一标识，应与文件内顶层 `id` 一致 |
+| `title` | 列表中显示的脑图名称 |
+| `file` | 当前目录内的 `.json` 文件名，不能包含路径跳转 |
+| `description` | 列表中的简短说明 |
+
+新增、改名或删除脑图文件时必须同步修改 `index.json`。只修改现有脑图内容时，不要无意义地改动清单。
 
 ## 脑图 JSON 完整结构
 
@@ -59,41 +74,52 @@
 | 字段 | 类型 | 规则 |
 | --- | --- | --- |
 | `version` | `1` | 当前只支持版本 1 |
-| `id` | 字符串 | 脑图或节点的稳定唯一标识 |
+| 顶层 `id` | 字符串 | 脑图稳定唯一标识 |
 | `title` | 字符串 | 脑图显示标题 |
 | `root` | 节点 | 唯一根节点 |
-| `text` | 字符串 | 普通文字和原始 LaTeX；可以换行 |
-| `side` | `left` / `right` / `center` | 仅根节点用 `center`；后代继承一级分支方向 |
-| `color` | `#RRGGBB` | 一级分支颜色；后代使用同色 |
-| `collapsed` | 布尔值 | `true` 时隐藏后代，但不删除数据 |
+| 节点 `id` | 字符串 | 同一张脑图内稳定且唯一 |
+| `text` | 字符串 | 普通文字和原始 LaTeX，可以换行 |
+| `side` | `left` / `right` / `center` | 仅根节点使用 `center` |
+| `color` | `#RRGGBB` | 一级分支颜色，后代使用同色 |
+| `collapsed` | 布尔值 | 页面首次打开时是否隐藏后代 |
 | `children` | 节点数组 | 无子节点时也必须写 `[]` |
 
-## 节点 ID 规范
+每个节点都必须显式包含 `id`、`text`、`side`、`color`、`collapsed` 和 `children`，不要省略字段。
 
-- 同一张脑图中的每个节点 ID 必须唯一。
+## 节点 ID 命名规范
+
 - 根节点固定使用 `root`。
-- 推荐使用小写英文和连字符，如 `growth-rate-current`；同组节点使用稳定前缀。
-- 修改现有脑图时尽量保留原有节点 ID，避免链接、外部引用和后续差异追踪失效。
-- 删除后不要立即把旧 ID 用于语义不同的新节点。
+- 推荐使用小写英文和连字符，例如 `growth-rate-current`。
+- 同组节点使用稳定前缀，例如 `growth-rate-definition`、`growth-rate-formula`。
+- 同一张脑图中的节点 ID 不得重复。
+- 修改现有脑图时应尽量保留原有节点 ID，避免链接、引用和差异追踪失效。
+- 删除节点后，不要立即把旧 ID 用于语义不同的新节点。
 
-## 左右分支
+## 左右分支设置
 
-根节点直属子节点设置 `side: "left"` 或 `side: "right"`。其所有后代必须使用相同方向和分支颜色。要把完整一级分支移到另一侧，递归修改该分支全部节点的 `side`；不要只修改父节点。
+根节点直属子节点设置 `side: "left"` 或 `side: "right"`。一个一级分支的所有后代必须保持相同方向和颜色。
+
+将完整分支移到另一侧时，应递归修改该一级分支及全部后代的 `side`；不要只修改父节点。颜色同理，修改一级分支颜色时应同步其后代。
 
 ## 新增、修改和删除节点
 
-- 新增：在目标节点的 `children` 数组中加入字段完整的新节点，并确认 ID 唯一。
-- 修改：只改所需字段；除非明确要求，不要重排无关节点，也不要重命名 ID。
-- 删除：从父节点的 `children` 中删除整个节点对象；删除会同时删除其全部后代。
-- 删除脑图文件：同时从 `index.json` 删除对应清单项。
+- 新增节点：在目标父节点的 `children` 中加入字段完整的新节点，并确认 ID 唯一、方向和颜色继承正确。
+- 修改节点：只修改用户要求的字段；除非明确要求，不要重排无关节点或更换 ID。
+- 删除节点：从父节点的 `children` 中删除整个对象；其所有后代会一起删除。
+- 新增脑图：新建 JSON 文件并在 `index.json` 中添加清单项。
+- 删除脑图：删除对应 JSON 文件并从 `index.json` 删除清单项。
 
-## LaTeX 与 JSON 转义
+不要通过修改 React 源码硬编码脑图内容。
 
-- 行内公式：`$r=\frac{增长量}{基期量}$`。
-- 独立公式：`$$r_{间隔}=r_1+r_2+r_1r_2$$`。
-- JSON 字符串中的反斜杠必须写成两个反斜杠。例如 LaTeX 源码 `\frac{a}{b}` 在 JSON 文件中写作 `\\frac{a}{b}`。
-- 换行使用 `\n`。普通文字和多个公式可以共存于同一个 `text`。
-- 不写 HTML 或 JavaScript。KaTeX 以 `trust: false` 渲染，危险命令不会执行；无效公式会在网页中显示原文，但校验命令会提示修复。
+## LaTeX 公式与 JSON 转义
+
+- 行内公式：`$r=\frac{增长量}{基期量}$`
+- 独立公式：`$$r_{间隔}=r_1+r_2+r_1r_2$$`
+- 普通文字和多个公式可以共存在一个 `text` 中。
+- JSON 字符串中的一个反斜杠必须写成两个反斜杠。例如 LaTeX `\frac{a}{b}` 在 JSON 文件中写作 `\\frac{a}{b}`。
+- 换行使用 `\n`。
+- 不要写 HTML 或 JavaScript。KaTeX 使用 `trust: false`；危险命令不会执行。
+- 公式解析失败时网页会显示原文，但 AI 应根据校验错误修正公式后再提交。
 
 ## 校验 JSON
 
@@ -103,7 +129,15 @@
 npm run validate:maps
 ```
 
-该命令检查 JSON 语法、清单和文件对应关系、必填字段、节点 ID 唯一性、分支方向、颜色格式与 LaTeX。AI 完成修改后必须运行此命令；不能用肉眼检查代替。
+该命令检查 JSON 语法、清单与文件对应关系、字段、节点 ID、分支方向、颜色和 LaTeX。不能用肉眼检查替代。
+
+AI 完成所有修改后还必须运行完整验证：
+
+```bash
+npm run verify
+```
+
+只有两个命令都成功，任务才算完成。
 
 ## 本地预览
 
@@ -112,69 +146,48 @@ npm install
 npm run dev
 ```
 
-打开终端显示的本地地址。检查仓库脑图列表、节点布局、折叠状态和公式。GitHub Pages 专用静态构建使用：
+打开终端显示的本地地址，检查：
+
+1. 新增或修改的脑图能从左侧列表打开。
+2. 左右分支、层级和颜色正确。
+3. 长文本和公式显示完整。
+4. 展开、收起、拖动、缩放和适应画布正常。
+5. 桌面端与移动端侧栏可正常开合。
+
+GitHub Pages 专用静态构建命令：
 
 ```bash
 npm run build:pages
 ```
 
-## 提交与部署
+## 提交修改并触发部署
 
 1. 运行 `npm run validate:maps`。
-2. 运行 `npm run build:pages`。
-3. 只提交源码、脑图数据与配置；不要提交 `dist/`、`dist-pages/` 或 `.next/`。
-4. 提交并推送到默认分支 `main`。
-5. GitHub Actions 自动构建并更新 GitHub Pages；在仓库 Actions/Deployments 页面确认成功。
+2. 运行 `npm run verify`。
+3. 只提交源码、脑图 JSON 和必要配置。
+4. 禁止提交 `dist/`、`dist-pages/`、`.next/` 或其他构建产物。
+5. 提交并推送到默认分支 `main`。
+6. GitHub Actions 自动构建并更新 GitHub Pages。
+7. 在仓库 Actions/Deployments 页面确认流水线成功。
 
-不要把密钥、令牌、邮箱、私人笔记或其他个人信息放入脑图和仓库。
-
-## GitHub Issue 脑图规则
-
-- 个人脑图可存放在公开 Issue 中，不需要修改 `public/mindmaps/`。
-- Issue 必须由 `Zhaoiii` 创建，标题必须以 `[mindmap]` 开头，例如 `[mindmap] 资料分析`。
-- 初始版本放在 Issue 描述中；后续每个版本作为一条新评论。网页优先读取本人发布的最新合法评论。
-- JSON 前必须包含标记 `<!-- zhijian-mindmap:v1 -->`，并放入 `json` 代码块。字段结构、ID 和 LaTeX 转义规则与仓库脑图完全相同。
-- 创建 Issue 后建议锁定会话，使无写权限的用户不能评论；网页仍会再次校验评论作者并忽略其他账号。
-- Issue 位于公开仓库，禁止放入私人笔记、令牌、密钥或个人信息。
-- 前端不得加入 GitHub token、PAT、OAuth Client Secret 或私钥。修改 Issue 解析代码后必须运行 `npm run verify`。
-
-示例 Issue 评论：
-
-````markdown
-<!-- zhijian-mindmap:v1 -->
-
-```json
-{
-  "version": 1,
-  "id": "sample-map",
-  "title": "示例脑图",
-  "root": {
-    "id": "root",
-    "text": "中心主题",
-    "side": "center",
-    "color": "#2D3038",
-    "collapsed": false,
-    "children": []
-  }
-}
-```
-````
+不要向仓库提交密钥、令牌、邮箱、私人笔记或个人信息。
 
 ## 添加一张脑图
 
 1. 在 `public/mindmaps/` 新建 `new-map.json`。
-2. 按统一 JSON 结构填写脑图。
+2. 按统一 JSON 结构填写完整脑图。
 3. 在 `public/mindmaps/index.json` 添加清单记录。
-4. 运行脑图校验命令。
-5. 运行项目构建，确认公式和节点正常显示。
+4. 运行 `npm run validate:maps`。
+5. 运行 `npm run verify`。
+6. 本地打开页面，确认公式、节点和布局正常。
 
-## 添加或修改 Issue 脑图
+## 修改一张现有脑图
 
-1. 按统一 JSON 结构生成完整脑图，不修改 `public/mindmaps/index.json`。
-2. 在内容前加入 `<!-- zhijian-mindmap:v1 -->`，并用 `json` 代码块包裹。
-3. 新脑图创建标题以 `[mindmap]` 开头的 Issue；修改现有脑图时发布到原 Issue 的新评论。
-4. 尽量保留已有节点 ID，并确认发布账号为 `Zhaoiii`。
-5. 重新打开网页中的 Issue 脑图，确认最新版本通过校验并正常渲染。
+1. 找到 `public/mindmaps/index.json` 中的清单项和对应文件。
+2. 只修改目标节点，尽量保留已有节点 ID 和无关内容顺序。
+3. 如果没有新增、改名或删除脑图，不要修改 `index.json`。
+4. 运行 `npm run validate:maps` 和 `npm run verify`。
+5. 汇报修改的文件、节点 ID 和验证结果。
 
 ## 可直接交给 AI 的操作模板
 
@@ -189,8 +202,9 @@ npm run build:pages
 1. 先阅读仓库根目录的 AI_GUIDE.md。
 2. 遵守脑图 JSON 结构和节点 ID 规范。
 3. 公式使用 LaTeX，并正确处理 JSON 反斜杠转义。
-4. 更新 public/mindmaps/index.json。
-5. 不要修改构建产物。
-6. 完成后运行脑图校验和项目构建。
-7. 汇报修改的文件、节点和验证结果。
+4. 新增、改名或删除脑图时更新 public/mindmaps/index.json；仅修改现有内容时不要无意义改动清单。
+5. 不要修改网页源码或构建产物，除非任务明确要求。
+6. 尽量保留现有节点 ID。
+7. 完成后运行 npm run validate:maps 和 npm run verify。
+8. 汇报修改的文件、节点 ID 和验证结果。
 ```

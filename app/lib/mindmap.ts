@@ -80,45 +80,6 @@ export function validateRepositoryIndex(input: unknown): input is RepositoryInde
   );
 }
 
-export function createBlankMap(): MindMapDocument {
-  const stamp = Date.now().toString(36);
-  return {
-    version: 1,
-    id: `mindmap-${stamp}`,
-    title: "未命名脑图",
-    root: {
-      id: "root",
-      text: "中心主题",
-      side: "center",
-      color: "#2D3038",
-      collapsed: false,
-      children: [],
-    },
-  };
-}
-
 export function cloneMap(map: MindMapDocument): MindMapDocument {
   return JSON.parse(JSON.stringify(map)) as MindMapDocument;
-}
-
-export function collectIds(root: MindMapNode): Set<string> {
-  const ids = new Set<string>();
-  const visit = (node: MindMapNode) => {
-    ids.add(node.id);
-    node.children.forEach(visit);
-  };
-  visit(root);
-  return ids;
-}
-
-export function makeNodeId(text: string, ids: Set<string>): string {
-  const base = text
-    .toLowerCase()
-    .trim()
-    .replace(/[^a-z0-9\u4e00-\u9fff]+/g, "-")
-    .replace(/^-|-$/g, "") || "topic";
-  let candidate = base;
-  let suffix = 2;
-  while (ids.has(candidate)) candidate = `${base}-${suffix++}`;
-  return candidate;
 }
