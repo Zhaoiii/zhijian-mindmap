@@ -460,9 +460,12 @@ export function MindMapApp() {
                 {positions.filter((item) => item.parentId).map((item) => {
                   const parent = positionById.get(item.parentId!);
                   if (!parent) return null;
-                  const direction = item.side === "left" ? -1 : 1;
-                  const startX = parent.x + direction * (parent.depth === 0 ? 65 : 86);
-                  const endX = item.x - direction * 86;
+                  // Draw through both card centres. Cards are painted above the
+                  // connector layer, so the hidden part adapts automatically to
+                  // variable text and formula widths and the visible line meets
+                  // each card edge without a gap.
+                  const startX = parent.x;
+                  const endX = item.x;
                   const bend = (endX - startX) * 0.52;
                   return <path key={item.node.id} d={`M ${startX} ${parent.y} C ${startX + bend} ${parent.y}, ${endX - bend} ${item.y}, ${endX} ${item.y}`} stroke={item.color} />;
                 })}
