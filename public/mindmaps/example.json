@@ -1,0 +1,106 @@
+{
+  "version": 1,
+  "id": "example",
+  "title": "枝见功能示例",
+  "root": {
+    "id": "root",
+    "text": "枝见\n让知识自然生长",
+    "side": "center",
+    "color": "#2D3038",
+    "collapsed": false,
+    "children": [
+      {
+        "id": "editing",
+        "text": "灵活编辑",
+        "side": "left",
+        "color": "#6758E8",
+        "collapsed": false,
+        "children": [
+          {
+            "id": "editing-levels",
+            "text": "添加子主题与同级主题",
+            "side": "left",
+            "color": "#6758E8",
+            "collapsed": false,
+            "children": []
+          },
+          {
+            "id": "editing-collapse",
+            "text": "展开与折叠\n这个节点预置为折叠状态",
+            "side": "left",
+            "color": "#6758E8",
+            "collapsed": true,
+            "children": [
+              {
+                "id": "editing-collapse-hidden",
+                "text": "展开后即可看到我",
+                "side": "left",
+                "color": "#6758E8",
+                "collapsed": false,
+                "children": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "latex",
+        "text": "LaTeX 公式",
+        "side": "right",
+        "color": "#10A793",
+        "collapsed": false,
+        "children": [
+          {
+            "id": "latex-inline",
+            "text": "文字中可混排行内公式 $E=mc^2$",
+            "side": "right",
+            "color": "#10A793",
+            "collapsed": false,
+            "children": []
+          },
+          {
+            "id": "latex-block",
+            "text": "独立公式\n$$\\sum_{i=1}^{n}x_i=\\frac{n(n+1)}{2}$$",
+            "side": "right",
+            "color": "#10A793",
+            "collapsed": false,
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": "storage",
+        "text": "数据自由",
+        "side": "left",
+        "color": "#E58A2D",
+        "collapsed": false,
+        "children": [
+          {
+            "id": "storage-local",
+            "text": "浏览器本地自动保存，刷新不丢失",
+            "side": "left",
+            "color": "#E58A2D",
+            "collapsed": false,
+            "children": []
+          },
+          {
+            "id": "storage-json",
+            "text": "安全导入与导出 JSON",
+            "side": "left",
+            "color": "#E58A2D",
+            "collapsed": false,
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": "long-content",
+        "text": "超长节点会自动换行，保持合理宽度，避免覆盖周围主题并保证公式仍然清晰可读",
+        "side": "right",
+        "color": "#2F80ED",
+        "collapsed": false,
+        "children": []
+      }
+    ]
+  }
+}

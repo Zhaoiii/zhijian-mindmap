@@ -1,0 +1,16 @@
+{
+  "maps": [
+    {
+      "id": "data-analysis",
+      "title": "资料分析知识框架",
+      "file": "data-analysis.json",
+      "description": "公务员考试资料分析知识点与常用公式"
+    },
+    {
+      "id": "example",
+      "title": "枝见功能示例",
+      "file": "example.json",
+      "description": "左右分支、折叠、长文本与公式演示"
+    }
+  ]
+}

@@ -1,0 +1,241 @@
+{
+  "version": 1,
+  "id": "data-analysis",
+  "title": "资料分析知识框架",
+  "root": {
+    "id": "root",
+    "text": "资料分析",
+    "side": "center",
+    "color": "#2D3038",
+    "collapsed": false,
+    "children": [
+      {
+        "id": "growth",
+        "text": "增长类",
+        "side": "left",
+        "color": "#6758E8",
+        "collapsed": false,
+        "children": [
+          {
+            "id": "growth-rate",
+            "text": "增长率\n$r=\\frac{增长量}{基期量}$",
+            "side": "left",
+            "color": "#6758E8",
+            "collapsed": false,
+            "children": [
+              {
+                "id": "growth-rate-current",
+                "text": "现期量与基期量\n$$r=\\frac{A-B}{B}$$",
+                "side": "left",
+                "color": "#6758E8",
+                "collapsed": false,
+                "children": []
+              },
+              {
+                "id": "growth-rate-interval",
+                "text": "间隔增长率\n$$r_{间隔}=r_1+r_2+r_1r_2$$",
+                "side": "left",
+                "color": "#6758E8",
+                "collapsed": false,
+                "children": []
+              }
+            ]
+          },
+          {
+            "id": "growth-amount",
+            "text": "增长量\n$增长量=现期量-基期量$",
+            "side": "left",
+            "color": "#6758E8",
+            "collapsed": false,
+            "children": [
+              {
+                "id": "growth-amount-formula",
+                "text": "已知现期量与增长率\n$$增长量=\\frac{A\\cdot r}{1+r}$$",
+                "side": "left",
+                "color": "#6758E8",
+                "collapsed": false,
+                "children": []
+              }
+            ]
+          },
+          {
+            "id": "base-period",
+            "text": "基期量\n$B=\\frac{A}{1+r}$",
+            "side": "left",
+            "color": "#6758E8",
+            "collapsed": false,
+            "children": []
+          },
+          {
+            "id": "annual-average-growth",
+            "text": "年均增长\n$$末期=初期(1+r)^n$$",
+            "side": "left",
+            "color": "#6758E8",
+            "collapsed": true,
+            "children": [
+              {
+                "id": "annual-average-years",
+                "text": "年份差决定 $n$，不是年份数量",
+                "side": "left",
+                "color": "#6758E8",
+                "collapsed": false,
+                "children": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "proportion",
+        "text": "比重类",
+        "side": "right",
+        "color": "#10A793",
+        "collapsed": false,
+        "children": [
+          {
+            "id": "current-proportion",
+            "text": "现期比重\n$p=\\frac{部分}{整体}$",
+            "side": "right",
+            "color": "#10A793",
+            "collapsed": false,
+            "children": [
+              {
+                "id": "current-proportion-amount",
+                "text": "部分量 $=整体量\\times比重$",
+                "side": "right",
+                "color": "#10A793",
+                "collapsed": false,
+                "children": []
+              }
+            ]
+          },
+          {
+            "id": "base-proportion",
+            "text": "基期比重\n$$p_0=\\frac{A}{B}\\times\\frac{1+b}{1+a}$$",
+            "side": "right",
+            "color": "#10A793",
+            "collapsed": false,
+            "children": []
+          },
+          {
+            "id": "proportion-change",
+            "text": "比重变化\n比较部分增长率 $a$ 与整体增长率 $b$",
+            "side": "right",
+            "color": "#10A793",
+            "collapsed": false,
+            "children": [
+              {
+                "id": "proportion-change-direction",
+                "text": "$a>b$ 时比重上升；$a<b$ 时比重下降",
+                "side": "right",
+                "color": "#10A793",
+                "collapsed": false,
+                "children": []
+              },
+              {
+                "id": "proportion-change-value",
+                "text": "两期比重差\n$$\\frac{A}{B}\\times\\frac{a-b}{1+a}$$",
+                "side": "right",
+                "color": "#10A793",
+                "collapsed": false,
+                "children": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "average",
+        "text": "平均数",
+        "side": "right",
+        "color": "#2F80ED",
+        "collapsed": false,
+        "children": [
+          {
+            "id": "current-average",
+            "text": "现期平均数\n$\\bar{x}=\\frac{总量}{份数}$",
+            "side": "right",
+            "color": "#2F80ED",
+            "collapsed": false,
+            "children": []
+          },
+          {
+            "id": "average-growth",
+            "text": "平均数增长率\n$$r_{平均}=\\frac{a-b}{1+b}$$",
+            "side": "right",
+            "color": "#2F80ED",
+            "collapsed": false,
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": "multiple",
+        "text": "倍数与翻番",
+        "side": "left",
+        "color": "#E58A2D",
+        "collapsed": false,
+        "children": [
+          {
+            "id": "multiple-basic",
+            "text": "A 是 B 的 $\\frac{A}{B}$ 倍",
+            "side": "left",
+            "color": "#E58A2D",
+            "collapsed": false,
+            "children": []
+          },
+          {
+            "id": "multiple-more",
+            "text": "A 比 B 多 $\\frac{A-B}{B}$ 倍",
+            "side": "left",
+            "color": "#E58A2D",
+            "collapsed": false,
+            "children": []
+          },
+          {
+            "id": "doubling",
+            "text": "翻 $n$ 番后是原来的 $2^n$ 倍",
+            "side": "left",
+            "color": "#E58A2D",
+            "collapsed": false,
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": "reading-strategy",
+        "text": "阅读与速算",
+        "side": "right",
+        "color": "#D65780",
+        "collapsed": false,
+        "children": [
+          {
+            "id": "structure-reading",
+            "text": "先读问题，再定位材料结构与时间",
+            "side": "right",
+            "color": "#D65780",
+            "collapsed": false,
+            "children": []
+          },
+          {
+            "id": "estimate-methods",
+            "text": "截位直除、分数比较、放缩与化同",
+            "side": "right",
+            "color": "#D65780",
+            "collapsed": true,
+            "children": [
+              {
+                "id": "estimate-error",
+                "text": "根据选项差距决定估算精度，避免过度计算",
+                "side": "right",
+                "color": "#D65780",
+                "collapsed": false,
+                "children": []
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
