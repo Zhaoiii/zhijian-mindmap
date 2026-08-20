@@ -4,80 +4,644 @@
   "title": "资料分析知识框架",
   "root": {
     "id": "root",
-    "text": "资料分析",
+    "text": "资料分析\n完整知识框架",
     "side": "center",
     "color": "#2D3038",
     "collapsed": false,
     "children": [
       {
-        "id": "growth",
-        "text": "增长类",
+        "id": "quick-calculation",
+        "text": "速算技巧",
         "side": "left",
         "color": "#6758E8",
-        "collapsed": false,
+        "collapsed": true,
         "children": [
           {
-            "id": "growth-rate",
-            "text": "增长率\n$r=\\frac{增长量}{基期量}$",
+            "id": "quick-general",
+            "text": "通用类（必修）",
             "side": "left",
             "color": "#6758E8",
             "collapsed": false,
             "children": [
               {
-                "id": "growth-rate-current",
-                "text": "现期量与基期量\n$$r=\\frac{A-B}{B}$$",
+                "id": "estimate-methods",
+                "text": "截位直除",
                 "side": "left",
                 "color": "#6758E8",
                 "collapsed": false,
-                "children": []
+                "children": [
+                  {
+                    "id": "division-which",
+                    "text": "截谁",
+                    "side": "left",
+                    "color": "#6758E8",
+                    "collapsed": false,
+                    "children": [
+                      {
+                        "id": "division-one-step",
+                        "text": "一步除法\n建议只截分母",
+                        "side": "left",
+                        "color": "#6758E8",
+                        "collapsed": false,
+                        "children": []
+                      },
+                      {
+                        "id": "division-multi-step",
+                        "text": "多步计算\n建议上下都截",
+                        "side": "left",
+                        "color": "#6758E8",
+                        "collapsed": false,
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "id": "division-digits",
+                    "text": "截几位",
+                    "side": "left",
+                    "color": "#6758E8",
+                    "collapsed": false,
+                    "children": [
+                      {
+                        "id": "division-two-digits",
+                        "text": "选项差距大：截两位\n首位不同；或首位相同、次位差大于首位",
+                        "side": "left",
+                        "color": "#6758E8",
+                        "collapsed": false,
+                        "children": []
+                      },
+                      {
+                        "id": "division-three-digits",
+                        "text": "选项差距小：截三位\n首位相同且次位差小于等于首位",
+                        "side": "left",
+                        "color": "#6758E8",
+                        "collapsed": false,
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "id": "division-special",
+                    "text": "特殊情况",
+                    "side": "left",
+                    "color": "#6758E8",
+                    "collapsed": false,
+                    "children": [
+                      {
+                        "id": "division-magnitude",
+                        "text": "有效数字相同（如 8.8 与 88）\n截位前先判断答案数量级",
+                        "side": "left",
+                        "color": "#6758E8",
+                        "collapsed": false,
+                        "children": []
+                      },
+                      {
+                        "id": "division-four-digits",
+                        "text": "选项前两位甚至前三位相同\n至少截四位（精算）",
+                        "side": "left",
+                        "color": "#6758E8",
+                        "collapsed": false,
+                        "children": []
+                      },
+                      {
+                        "id": "division-difference",
+                        "text": "两个分数作差\n差值可能很小，最好截三位",
+                        "side": "left",
+                        "color": "#6758E8",
+                        "collapsed": false,
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
               },
               {
-                "id": "growth-rate-interval",
-                "text": "间隔增长率\n$$r_{间隔}=r_1+r_2+r_1r_2$$",
+                "id": "multi-add-subtract",
+                "text": "多数加减",
                 "side": "left",
                 "color": "#6758E8",
                 "collapsed": false,
-                "children": []
+                "children": [
+                  {
+                    "id": "last-digit-method",
+                    "text": "尾数法\n精确加减且选项尾数不同\n看最后一位或最后两位",
+                    "side": "left",
+                    "color": "#6758E8",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "high-to-low",
+                    "text": "高算低看\n从最高位开始估算\n结合选项及时止损，一般算前两位",
+                    "side": "left",
+                    "color": "#6758E8",
+                    "collapsed": false,
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "fraction-comparison",
+                "text": "分数比较",
+                "side": "left",
+                "color": "#6758E8",
+                "collapsed": false,
+                "children": [
+                  {
+                    "id": "fraction-one-large-one-small",
+                    "text": "一大一小：看分子\n分子大的分数大\n“钱多人少”思维",
+                    "side": "left",
+                    "color": "#6758E8",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "fraction-same-direction",
+                    "text": "同大同小",
+                    "side": "left",
+                    "color": "#6758E8",
+                    "collapsed": false,
+                    "children": [
+                      {
+                        "id": "fraction-direct-division",
+                        "text": "竖着直接除\n注意数量级",
+                        "side": "left",
+                        "color": "#6758E8",
+                        "collapsed": false,
+                        "children": []
+                      },
+                      {
+                        "id": "fraction-multiples",
+                        "text": "横着看倍数\n分子倍数大者大；分母倍数大者小",
+                        "side": "left",
+                        "color": "#6758E8",
+                        "collapsed": false,
+                        "children": []
+                      },
+                      {
+                        "id": "fraction-four-options",
+                        "text": "倍数不好看就直除\n4 个分数都同大同小时看首位",
+                        "side": "left",
+                        "color": "#6758E8",
+                        "collapsed": false,
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
               }
             ]
           },
           {
-            "id": "growth-amount",
-            "text": "增长量\n$增长量=现期量-基期量$",
+            "id": "quick-advanced",
+            "text": "拔高类（选修）",
             "side": "left",
             "color": "#6758E8",
             "collapsed": false,
             "children": [
               {
-                "id": "growth-amount-formula",
-                "text": "已知现期量与增长率\n$$增长量=\\frac{A\\cdot r}{1+r}$$",
+                "id": "proportional-scaling",
+                "text": "等比例收缩",
                 "side": "left",
                 "color": "#6758E8",
                 "collapsed": false,
-                "children": []
+                "children": [
+                  {
+                    "id": "scaling-meaning",
+                    "text": "最精确的速算技巧\n但操作难度较高",
+                    "side": "left",
+                    "color": "#6758E8",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "scaling-when",
+                    "text": "理论上所有除法都可用\n差距大用截两位或估算\n差距小的一步除法常截三位",
+                    "side": "left",
+                    "color": "#6758E8",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "scaling-base-near-one",
+                    "text": "分母接近 1 的基期量\n观察分子分母倍数，同加减\n把分母变成 1（或 100）",
+                    "side": "left",
+                    "color": "#6758E8",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "scaling-close-denominators",
+                    "text": "两个相近分母的除法加减\n作差得差分数，再同加减\n把分母变成相同",
+                    "side": "left",
+                    "color": "#6758E8",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "scaling-base-ratio",
+                    "text": "基期比例选项差距小\n分析不能唯一确定时\n观察倍数，把后面部分约掉",
+                    "side": "left",
+                    "color": "#6758E8",
+                    "collapsed": false,
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "difference-method",
+                "text": "差分法",
+                "side": "left",
+                "color": "#6758E8",
+                "collapsed": false,
+                "children": [
+                  {
+                    "id": "difference-method-when",
+                    "text": "同大同小\n且两个分子、分母都非常接近",
+                    "side": "left",
+                    "color": "#6758E8",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "difference-method-how",
+                    "text": "分子、分母分别作差得差分数\n用差分数代替分子大的分数\n与分子小的分数比较",
+                    "side": "left",
+                    "color": "#6758E8",
+                    "collapsed": false,
+                    "children": []
+                  }
+                ]
               }
             ]
-          },
+          }
+        ]
+      },
+      {
+        "id": "base-current",
+        "text": "基期与现期",
+        "side": "right",
+        "color": "#10A793",
+        "collapsed": true,
+        "children": [
           {
-            "id": "base-period",
-            "text": "基期量\n$B=\\frac{A}{1+r}$",
-            "side": "left",
-            "color": "#6758E8",
+            "id": "base-current-symbols",
+            "text": "符号说明\n$A$：现期量，$B$：基期量\n$r$：增长率，$\\Delta$：增长量",
+            "side": "right",
+            "color": "#10A793",
             "collapsed": false,
             "children": []
           },
           {
-            "id": "annual-average-growth",
-            "text": "年均增长\n$$末期=初期(1+r)^n$$",
-            "side": "left",
-            "color": "#6758E8",
-            "collapsed": true,
+            "id": "base-period",
+            "text": "基期量",
+            "side": "right",
+            "color": "#10A793",
+            "collapsed": false,
             "children": [
               {
-                "id": "annual-average-years",
-                "text": "年份差决定 $n$，不是年份数量",
+                "id": "base-period-recognition",
+                "text": "识别\n求以前某个时期的量",
+                "side": "right",
+                "color": "#10A793",
+                "collapsed": false,
+                "children": []
+              },
+              {
+                "id": "base-period-formulas",
+                "text": "核心公式",
+                "side": "right",
+                "color": "#10A793",
+                "collapsed": false,
+                "children": [
+                  {
+                    "id": "base-from-growth-amount",
+                    "text": "$$B=A-\\Delta$$",
+                    "side": "right",
+                    "color": "#10A793",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "base-from-rate",
+                    "text": "$$B=\\frac{A}{1+r}$$",
+                    "side": "right",
+                    "color": "#10A793",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "base-from-delta-rate",
+                    "text": "$$B=\\frac{\\Delta}{r}$$",
+                    "side": "right",
+                    "color": "#10A793",
+                    "collapsed": false,
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "base-period-speed",
+                "text": "速算\n截位直除；当 $|r|<5\\%$\n$\\frac{A}{1+r}\\approx A(1-r)$",
+                "side": "right",
+                "color": "#10A793",
+                "collapsed": false,
+                "children": []
+              },
+              {
+                "id": "base-period-sum-difference",
+                "text": "基期和差\n先用现期量和正负排除\n再计算，算一步看一步",
+                "side": "right",
+                "color": "#10A793",
+                "collapsed": false,
+                "children": []
+              },
+              {
+                "id": "base-period-comparison",
+                "text": "基期比较",
+                "side": "right",
+                "color": "#10A793",
+                "collapsed": false,
+                "children": [
+                  {
+                    "id": "base-comparison-current-large",
+                    "text": "现期量差距大且 $r$ 小\n现期量大者，基期量通常更大",
+                    "side": "right",
+                    "color": "#10A793",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "base-comparison-current-close",
+                    "text": "现期量相同或接近\n用分数比较法\n增长率小者基期量更大",
+                    "side": "right",
+                    "color": "#10A793",
+                    "collapsed": false,
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "current-period",
+            "text": "现期量",
+            "side": "right",
+            "color": "#10A793",
+            "collapsed": false,
+            "children": [
+              {
+                "id": "current-period-recognition",
+                "text": "识别\n求未来某个时期的量",
+                "side": "right",
+                "color": "#10A793",
+                "collapsed": false,
+                "children": []
+              },
+              {
+                "id": "current-period-formulas",
+                "text": "核心公式\n$A=B+\\Delta$\n$A=B(1+r)$",
+                "side": "right",
+                "color": "#10A793",
+                "collapsed": false,
+                "children": []
+              },
+              {
+                "id": "current-period-speed",
+                "text": "速算\n乘法拆开算；未给 $r$ 且两期接近时\n用增长量估算，选略大的结果",
+                "side": "right",
+                "color": "#10A793",
+                "collapsed": false,
+                "children": []
+              },
+              {
+                "id": "current-period-question",
+                "text": "注意问法\n保持增量不变\n还是保持增速不变",
+                "side": "right",
+                "color": "#10A793",
+                "collapsed": false,
+                "children": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "growth",
+        "text": "一般增长率",
+        "side": "left",
+        "color": "#2F80ED",
+        "collapsed": true,
+        "children": [
+          {
+            "id": "growth-rate",
+            "text": "增长率计算",
+            "side": "left",
+            "color": "#2F80ED",
+            "collapsed": false,
+            "children": [
+              {
+                "id": "growth-rate-current",
+                "text": "识别\n增速、增幅、增长率\n增长/下降 + 比例（%、几成、倍）",
                 "side": "left",
-                "color": "#6758E8",
+                "color": "#2F80ED",
+                "collapsed": false,
+                "children": []
+              },
+              {
+                "id": "growth-rate-points",
+                "text": "考法一：给百分点\n高减低加",
+                "side": "left",
+                "color": "#2F80ED",
+                "collapsed": false,
+                "children": []
+              },
+              {
+                "id": "growth-rate-two-known",
+                "text": "考法二\n现期量、基期量、增长量\n任给两个求增长率",
+                "side": "left",
+                "color": "#2F80ED",
+                "collapsed": false,
+                "children": []
+              },
+              {
+                "id": "growth-rate-threshold",
+                "text": "考法三\n判断超过 10%（20%、50%、100%）\n的有几个",
+                "side": "left",
+                "color": "#2F80ED",
+                "collapsed": false,
+                "children": []
+              },
+              {
+                "id": "growth-rate-formula",
+                "text": "$$r=\\frac{\\Delta}{B}=\\frac{A-B}{B}=\\frac{\\Delta}{A-\\Delta}$$",
+                "side": "left",
+                "color": "#2F80ED",
+                "collapsed": false,
+                "children": []
+              },
+              {
+                "id": "growth-rate-denominator",
+                "text": "注意\n计算增长率时\n分母一定是基期量",
+                "side": "left",
+                "color": "#2F80ED",
+                "collapsed": false,
+                "children": []
+              }
+            ]
+          },
+          {
+            "id": "growth-rate-comparison",
+            "text": "增长率比较",
+            "side": "left",
+            "color": "#2F80ED",
+            "collapsed": false,
+            "children": [
+              {
+                "id": "growth-comparison-recognition",
+                "text": "识别\n增长率排序\n增长 + 快/慢",
+                "side": "left",
+                "color": "#2F80ED",
+                "collapsed": false,
+                "children": []
+              },
+              {
+                "id": "growth-comparison-base-current",
+                "text": "已知现期量和基期量\n先看 $A/B$ 的倍数\n看不出再用 $\\Delta/B$",
+                "side": "left",
+                "color": "#2F80ED",
+                "collapsed": false,
+                "children": []
+              },
+              {
+                "id": "growth-comparison-current-delta",
+                "text": "已知现期量和增长量\n只比较时可直接看\n$\\Delta/A$",
+                "side": "left",
+                "color": "#2F80ED",
+                "collapsed": false,
+                "children": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "growth-amount",
+        "text": "增长量",
+        "side": "right",
+        "color": "#E58A2D",
+        "collapsed": true,
+        "children": [
+          {
+            "id": "growth-amount-calculate",
+            "text": "增长量计算",
+            "side": "right",
+            "color": "#E58A2D",
+            "collapsed": false,
+            "children": [
+              {
+                "id": "growth-amount-recognition",
+                "text": "识别\n增长量为多少\n增长 + 单位（如亿元）",
+                "side": "right",
+                "color": "#E58A2D",
+                "collapsed": false,
+                "children": []
+              },
+              {
+                "id": "growth-amount-difference",
+                "text": "已知现期量和基期量\n$$\\Delta=A-B$$",
+                "side": "right",
+                "color": "#E58A2D",
+                "collapsed": false,
+                "children": []
+              },
+              {
+                "id": "growth-amount-formula",
+                "text": "已知现期量和 $r$（重点）\n$$\\Delta=Br=\\frac{A}{1+r}r$$",
+                "side": "right",
+                "color": "#E58A2D",
+                "collapsed": false,
+                "children": []
+              },
+              {
+                "id": "growth-amount-methods",
+                "text": "百分数化分数\n近似转化、倍数转化\n取中转化、公式法",
+                "side": "right",
+                "color": "#E58A2D",
+                "collapsed": false,
+                "children": []
+              },
+              {
+                "id": "growth-amount-fraction",
+                "text": "当 $|r|=\\frac{1}{N}$",
+                "side": "right",
+                "color": "#E58A2D",
+                "collapsed": false,
+                "children": [
+                  {
+                    "id": "growth-amount-positive",
+                    "text": "$r>0$：$$\\Delta=\\frac{A}{N+1}$$",
+                    "side": "right",
+                    "color": "#E58A2D",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "growth-amount-negative",
+                    "text": "$r<0$：$$\\Delta=-\\frac{A}{N-1}$$",
+                    "side": "right",
+                    "color": "#E58A2D",
+                    "collapsed": false,
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "growth-amount-comparison",
+            "text": "增长量比较",
+            "side": "right",
+            "color": "#E58A2D",
+            "collapsed": false,
+            "children": [
+              {
+                "id": "growth-amount-comparison-recognition",
+                "text": "识别\n增长量排序\n增长 + 多少",
+                "side": "right",
+                "color": "#E58A2D",
+                "collapsed": false,
+                "children": []
+              },
+              {
+                "id": "growth-amount-known-base",
+                "text": "已知现期量和基期量\n直接作差\n柱形图看高度差",
+                "side": "right",
+                "color": "#E58A2D",
+                "collapsed": false,
+                "children": []
+              },
+              {
+                "id": "growth-amount-known-rate",
+                "text": "已知现期量和 $r$\n大大则大；一大一小看倍数\n（百分点）",
+                "side": "right",
+                "color": "#E58A2D",
+                "collapsed": false,
+                "children": []
+              },
+              {
+                "id": "growth-amount-close-multiples",
+                "text": "$r$ 的倍数略大于现期量倍数时\n建议百分数化分数",
+                "side": "right",
+                "color": "#E58A2D",
+                "collapsed": false,
+                "children": []
+              },
+              {
+                "id": "growth-amount-signs",
+                "text": "同为正：比增长量；同为负：比减少量\n一正一负：增长量正数大于负数\n比较变化量时用百分点计算",
+                "side": "right",
+                "color": "#E58A2D",
                 "collapsed": false,
                 "children": []
               }
@@ -87,23 +651,71 @@
       },
       {
         "id": "proportion",
-        "text": "比重类",
-        "side": "right",
-        "color": "#10A793",
-        "collapsed": false,
+        "text": "比重",
+        "side": "left",
+        "color": "#D65780",
+        "collapsed": true,
         "children": [
           {
             "id": "current-proportion",
-            "text": "现期比重\n$p=\\frac{部分}{整体}$",
-            "side": "right",
-            "color": "#10A793",
+            "text": "现期比重",
+            "side": "left",
+            "color": "#D65780",
             "collapsed": false,
             "children": [
               {
+                "id": "current-proportion-recognition",
+                "text": "识别\n求今年，题干或材料有“占比”",
+                "side": "left",
+                "color": "#D65780",
+                "collapsed": false,
+                "children": []
+              },
+              {
                 "id": "current-proportion-amount",
-                "text": "部分量 $=整体量\\times比重$",
-                "side": "right",
-                "color": "#10A793",
+                "text": "比重三式\n$比重=\\frac{部分}{整体}$\n$整体=\\frac{部分}{比重}$；$部分=整体\\times 比重$",
+                "side": "left",
+                "color": "#D65780",
+                "collapsed": false,
+                "children": []
+              },
+              {
+                "id": "proportion-special-concepts",
+                "text": "特殊概念\n$利润率=\\frac{利润}{收入}$\n$增长贡献率=\\frac{部分增长量}{整体增长量}$",
+                "side": "left",
+                "color": "#D65780",
+                "collapsed": false,
+                "children": []
+              },
+              {
+                "id": "proportion-transfer",
+                "text": "比重传递\n已知 A 占 B、B 占 C\n求 A 占 C",
+                "side": "left",
+                "color": "#D65780",
+                "collapsed": false,
+                "children": []
+              },
+              {
+                "id": "proportion-ratio",
+                "text": "比重比例\n已知 A 占整体比重\n求 B 占整体比重",
+                "side": "left",
+                "color": "#D65780",
+                "collapsed": false,
+                "children": []
+              },
+              {
+                "id": "proportion-pie-chart",
+                "text": "饼状图：12 点原则\n看大小、看特殊占比\n重点关注四分之一",
+                "side": "left",
+                "color": "#D65780",
+                "collapsed": false,
+                "children": []
+              },
+              {
+                "id": "proportion-speed",
+                "text": "速算\n除法截位直除\n乘法拆分凑整",
+                "side": "left",
+                "color": "#D65780",
                 "collapsed": false,
                 "children": []
               }
@@ -111,32 +723,81 @@
           },
           {
             "id": "base-proportion",
-            "text": "基期比重\n$$p_0=\\frac{A}{B}\\times\\frac{1+b}{1+a}$$",
-            "side": "right",
-            "color": "#10A793",
-            "collapsed": false,
-            "children": []
-          },
-          {
-            "id": "proportion-change",
-            "text": "比重变化\n比较部分增长率 $a$ 与整体增长率 $b$",
-            "side": "right",
-            "color": "#10A793",
+            "text": "基期比重",
+            "side": "left",
+            "color": "#D65780",
             "collapsed": false,
             "children": [
               {
-                "id": "proportion-change-direction",
-                "text": "$a>b$ 时比重上升；$a<b$ 时比重下降",
-                "side": "right",
-                "color": "#10A793",
+                "id": "base-proportion-recognition",
+                "text": "识别\n求去年的占比",
+                "side": "left",
+                "color": "#D65780",
+                "collapsed": false,
+                "children": []
+              },
+              {
+                "id": "base-proportion-formula",
+                "text": "$$\\frac{A/(1+a)}{B/(1+b)}=\\frac{A}{B}\\times\\frac{1+b}{1+a}$$",
+                "side": "left",
+                "color": "#D65780",
+                "collapsed": false,
+                "children": []
+              },
+              {
+                "id": "base-proportion-analysis",
+                "text": "分析思维\n先算左边现期比重\n观察右边与 1 的关系，结合选项定范围",
+                "side": "left",
+                "color": "#D65780",
+                "collapsed": false,
+                "children": []
+              },
+              {
+                "id": "base-proportion-calculate",
+                "text": "计算思维\n差距大：上下截两位约分\n差距小且分析不出：等比例放缩",
+                "side": "left",
+                "color": "#D65780",
+                "collapsed": false,
+                "children": []
+              }
+            ]
+          },
+          {
+            "id": "proportion-change",
+            "text": "两期比重",
+            "side": "left",
+            "color": "#D65780",
+            "collapsed": false,
+            "children": [
+              {
+                "id": "proportion-change-recognition",
+                "text": "识别\n两个时间、一个比重",
+                "side": "left",
+                "color": "#D65780",
                 "collapsed": false,
                 "children": []
               },
               {
                 "id": "proportion-change-value",
-                "text": "两期比重差\n$$\\frac{A}{B}\\times\\frac{a-b}{1+a}$$",
-                "side": "right",
-                "color": "#10A793",
+                "text": "$$两期比重差=\\frac{A}{B}\\times\\frac{a-b}{1+a}$$",
+                "side": "left",
+                "color": "#D65780",
+                "collapsed": false,
+                "children": []
+              },
+              {
+                "id": "proportion-change-direction",
+                "text": "判断升降\n$a>b$：上升\n$a<b$：下降",
+                "side": "left",
+                "color": "#D65780",
+                "collapsed": false,
+                "children": []
+              },
+              {
+                "id": "proportion-change-points",
+                "text": "求上升/下降多少个百分点\n先判升降；再选小于增速之差的结果\n不能锁定范围时，代公式估算",
+                "side": "left",
+                "color": "#D65780",
                 "collapsed": false,
                 "children": []
               }
@@ -148,87 +809,484 @@
         "id": "average",
         "text": "平均数",
         "side": "right",
-        "color": "#2F80ED",
-        "collapsed": false,
+        "color": "#7A62C7",
+        "collapsed": true,
         "children": [
           {
             "id": "current-average",
-            "text": "现期平均数\n$\\bar{x}=\\frac{总量}{份数}$",
+            "text": "现期平均数",
             "side": "right",
-            "color": "#2F80ED",
+            "color": "#7A62C7",
             "collapsed": false,
-            "children": []
+            "children": [
+              {
+                "id": "current-average-formula",
+                "text": "$平均数=\\frac{总数}{份数}$\n口诀：后面除以前面",
+                "side": "right",
+                "color": "#7A62C7",
+                "collapsed": false,
+                "children": []
+              },
+              {
+                "id": "current-average-speed",
+                "text": "速算\n截位直除\n削峰填谷",
+                "side": "right",
+                "color": "#7A62C7",
+                "collapsed": false,
+                "children": []
+              }
+            ]
+          },
+          {
+            "id": "base-average",
+            "text": "基期平均数",
+            "side": "right",
+            "color": "#7A62C7",
+            "collapsed": false,
+            "children": [
+              {
+                "id": "base-average-recognition",
+                "text": "识别\n求去年，题干中有“平均”",
+                "side": "right",
+                "color": "#7A62C7",
+                "collapsed": false,
+                "children": []
+              },
+              {
+                "id": "base-average-formula",
+                "text": "$$\\frac{A/(1+a)}{B/(1+b)}=\\frac{A}{B}\\times\\frac{1+b}{1+a}$$",
+                "side": "right",
+                "color": "#7A62C7",
+                "collapsed": false,
+                "children": []
+              },
+              {
+                "id": "base-average-thinking",
+                "text": "分析与计算\n同基期比重\n先定范围，再截位或等比例放缩",
+                "side": "right",
+                "color": "#7A62C7",
+                "collapsed": false,
+                "children": []
+              }
+            ]
           },
           {
             "id": "average-growth",
-            "text": "平均数增长率\n$$r_{平均}=\\frac{a-b}{1+b}$$",
+            "text": "两期平均数",
             "side": "right",
-            "color": "#2F80ED",
+            "color": "#7A62C7",
             "collapsed": false,
-            "children": []
+            "children": [
+              {
+                "id": "average-growth-recognition",
+                "text": "识别\n两个时间、一个平均",
+                "side": "right",
+                "color": "#7A62C7",
+                "collapsed": false,
+                "children": []
+              },
+              {
+                "id": "average-growth-direction",
+                "text": "平均数比去年升降\n$a>b$：上升；$a<b$：下降\n$a=b$：不变",
+                "side": "right",
+                "color": "#7A62C7",
+                "collapsed": false,
+                "children": []
+              },
+              {
+                "id": "average-growth-amount-recognition",
+                "text": "问“平均数 + 增长 + 单位”\n识别为平均数增长量",
+                "side": "right",
+                "color": "#7A62C7",
+                "collapsed": false,
+                "children": []
+              },
+              {
+                "id": "average-growth-rate",
+                "text": "问“平均数增长 + %”\n先找分子增速 $a$ 与分母增速 $b$\n$$r_{平均}=\\frac{a-b}{1+b}$$",
+                "side": "right",
+                "color": "#7A62C7",
+                "collapsed": false,
+                "children": []
+              }
+            ]
           }
         ]
       },
       {
         "id": "multiple",
-        "text": "倍数与翻番",
+        "text": "倍数",
         "side": "left",
-        "color": "#E58A2D",
-        "collapsed": false,
+        "color": "#17A673",
+        "collapsed": true,
         "children": [
           {
             "id": "multiple-basic",
-            "text": "A 是 B 的 $\\frac{A}{B}$ 倍",
+            "text": "现期倍数",
             "side": "left",
-            "color": "#E58A2D",
+            "color": "#17A673",
+            "collapsed": false,
+            "children": [
+              {
+                "id": "current-multiple-recognition",
+                "text": "识别\n求今年，题干中有“倍数”",
+                "side": "left",
+                "color": "#17A673",
+                "collapsed": false,
+                "children": []
+              },
+              {
+                "id": "current-multiple-formula",
+                "text": "公式：前面除以后面\n速算：截位直除",
+                "side": "left",
+                "color": "#17A673",
+                "collapsed": false,
+                "children": []
+              },
+              {
+                "id": "multiple-is",
+                "text": "“是几倍”\n直接相除",
+                "side": "left",
+                "color": "#17A673",
+                "collapsed": false,
+                "children": []
+              },
+              {
+                "id": "multiple-more",
+                "text": "“多/高/增长几倍”\n相除后减 1",
+                "side": "left",
+                "color": "#17A673",
+                "collapsed": false,
+                "children": []
+              },
+              {
+                "id": "multiple-exceed",
+                "text": "“超过 N 倍”\n表示大于 N 倍",
+                "side": "left",
+                "color": "#17A673",
+                "collapsed": false,
+                "children": []
+              }
+            ]
+          },
+          {
+            "id": "base-multiple",
+            "text": "基期倍数",
+            "side": "left",
+            "color": "#17A673",
+            "collapsed": false,
+            "children": [
+              {
+                "id": "base-multiple-recognition",
+                "text": "识别\n求去年 A 是 B 的多少倍",
+                "side": "left",
+                "color": "#17A673",
+                "collapsed": false,
+                "children": []
+              },
+              {
+                "id": "base-multiple-formula",
+                "text": "$$\\frac{A/(1+a)}{B/(1+b)}=\\frac{A}{B}\\times\\frac{1+b}{1+a}$$",
+                "side": "left",
+                "color": "#17A673",
+                "collapsed": false,
+                "children": []
+              },
+              {
+                "id": "base-multiple-thinking",
+                "text": "分析与计算\n同基期比重\n先定范围，再截位或等比例放缩",
+                "side": "left",
+                "color": "#17A673",
+                "collapsed": false,
+                "children": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "interval-growth",
+        "text": "间隔问题",
+        "side": "right",
+        "color": "#E06C75",
+        "collapsed": true,
+        "children": [
+          {
+            "id": "growth-rate-interval",
+            "text": "识别\n时间上隔一期",
+            "side": "right",
+            "color": "#E06C75",
             "collapsed": false,
             "children": []
           },
           {
-            "id": "multiple-more",
-            "text": "A 比 B 多 $\\frac{A-B}{B}$ 倍",
-            "side": "left",
-            "color": "#E58A2D",
+            "id": "interval-rate",
+            "text": "求间隔增长率\n$$r_{间隔}=r_1+r_2+r_1r_2$$",
+            "side": "right",
+            "color": "#E06C75",
+            "collapsed": false,
+            "children": [
+              {
+                "id": "interval-rate-speed",
+                "text": "先看 $r_1+r_2$ 能否排除\n不能排除时再估算乘积",
+                "side": "right",
+                "color": "#E06C75",
+                "collapsed": false,
+                "children": []
+              }
+            ]
+          },
+          {
+            "id": "interval-base",
+            "text": "求间隔基期量\n$$B_{间隔}=\\frac{A}{1+r_{间隔}}$$\n先算间隔增长率，再直除",
+            "side": "right",
+            "color": "#E06C75",
             "collapsed": false,
             "children": []
           },
           {
-            "id": "doubling",
-            "text": "翻 $n$ 番后是原来的 $2^n$ 倍",
-            "side": "left",
-            "color": "#E58A2D",
+            "id": "interval-multiple",
+            "text": "求间隔倍数\n$$倍数=r_{间隔}+1$$",
+            "side": "right",
+            "color": "#E06C75",
+            "collapsed": false,
+            "children": []
+          },
+          {
+            "id": "interval-amount",
+            "text": "求间隔增长量（极少）\n先算间隔增长率\n再用百分数化分数的增长量公式",
+            "side": "right",
+            "color": "#E06C75",
             "collapsed": false,
             "children": []
           }
         ]
       },
       {
-        "id": "reading-strategy",
-        "text": "阅读与速算",
-        "side": "right",
-        "color": "#D65780",
-        "collapsed": false,
+        "id": "mixed-growth",
+        "text": "混合增长率",
+        "side": "left",
+        "color": "#5563B8",
+        "collapsed": true,
         "children": [
           {
-            "id": "structure-reading",
-            "text": "先读问题，再定位材料结构与时间",
-            "side": "right",
-            "color": "#D65780",
+            "id": "mixed-growth-recognition",
+            "text": "识别\n求增长率但缺少数据\n主体之间存在和差关系",
+            "side": "left",
+            "color": "#5563B8",
             "collapsed": false,
             "children": []
           },
           {
-            "id": "estimate-methods",
-            "text": "截位直除、分数比较、放缩与化同",
-            "side": "right",
-            "color": "#D65780",
-            "collapsed": true,
+            "id": "mixed-growth-rule",
+            "text": "口诀\n混合之后整体居中\n偏向基期量大的",
+            "side": "left",
+            "color": "#5563B8",
+            "collapsed": false,
+            "children": []
+          },
+          {
+            "id": "mixed-growth-relations",
+            "text": "常见和差关系",
+            "side": "left",
+            "color": "#5563B8",
+            "collapsed": false,
             "children": [
               {
-                "id": "estimate-error",
-                "text": "根据选项差距决定估算精度，避免过度计算",
+                "id": "mixed-time",
+                "text": "时间型\n1—5 月 + 6 月 = 1—6 月\n一季度 + 二季度 = 上半年",
+                "side": "left",
+                "color": "#5563B8",
+                "collapsed": false,
+                "children": []
+              },
+              {
+                "id": "mixed-pairing",
+                "text": "搭配型\n进口+出口=进出口；城镇+农村=全国\n邮政+电信=邮电；本币+外币=本外币",
+                "side": "left",
+                "color": "#5563B8",
+                "collapsed": false,
+                "children": []
+              },
+              {
+                "id": "mixed-logic",
+                "text": "逻辑型\nA + 非 A = 总体\n如实物 + 非实物 = 所有商品",
+                "side": "left",
+                "color": "#5563B8",
+                "collapsed": false,
+                "children": []
+              }
+            ]
+          },
+          {
+            "id": "mixed-growth-special",
+            "text": "特殊考法",
+            "side": "left",
+            "color": "#5563B8",
+            "collapsed": false,
+            "children": [
+              {
+                "id": "mixed-difference-rate",
+                "text": "求一个差的增长率\n先移项变成和\n再用混合增长率口诀",
+                "side": "left",
+                "color": "#5563B8",
+                "collapsed": false,
+                "children": []
+              },
+              {
+                "id": "mixed-part-overall",
+                "text": "比较部分增速与整体增速",
+                "side": "left",
+                "color": "#5563B8",
+                "collapsed": false,
+                "children": [
+                  {
+                    "id": "mixed-cumulative-up",
+                    "text": "累计增速上升\n当期 $r>$ 累计 $r$",
+                    "side": "left",
+                    "color": "#5563B8",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "mixed-cumulative-down",
+                    "text": "累计增速下降\n当期 $r<$ 累计 $r$",
+                    "side": "left",
+                    "color": "#5563B8",
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "mixed-cumulative-flat",
+                    "text": "累计增速不变\n当期 $r=$ 累计 $r$",
+                    "side": "left",
+                    "color": "#5563B8",
+                    "collapsed": false,
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "id": "mixed-line-method",
+                "text": "线段法\n距离和量成反比\n口诀不能解题或已知 $r$ 求两部分量之比时用",
+                "side": "left",
+                "color": "#5563B8",
+                "collapsed": false,
+                "children": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "annual-average-growth",
+        "text": "年均增长类",
+        "side": "right",
+        "color": "#B7791F",
+        "collapsed": true,
+        "children": [
+          {
+            "id": "annual-average-amount",
+            "text": "年均增长量",
+            "side": "right",
+            "color": "#B7791F",
+            "collapsed": false,
+            "children": [
+              {
+                "id": "annual-average-amount-recognition",
+                "text": "识别\n年均增长 + 单位（如元）",
                 "side": "right",
-                "color": "#D65780",
+                "color": "#B7791F",
+                "collapsed": false,
+                "children": []
+              },
+              {
+                "id": "annual-average-amount-formula",
+                "text": "$$年均增长量=\\frac{现期量-基期量}{年份差}$$",
+                "side": "right",
+                "color": "#B7791F",
+                "collapsed": false,
+                "children": []
+              }
+            ]
+          },
+          {
+            "id": "annual-average-rate",
+            "text": "年均增长率",
+            "side": "right",
+            "color": "#B7791F",
+            "collapsed": false,
+            "children": [
+              {
+                "id": "annual-average-rate-recognition",
+                "text": "识别\n年均增长最快、年均增速排序",
+                "side": "right",
+                "color": "#B7791F",
+                "collapsed": false,
+                "children": []
+              },
+              {
+                "id": "annual-average-rate-formula",
+                "text": "$$(1+r)^n=\\frac{现期量}{基期量}$$",
+                "side": "right",
+                "color": "#B7791F",
+                "collapsed": false,
+                "children": []
+              },
+              {
+                "id": "annual-average-rate-comparison",
+                "text": "比较方法\n$n$ 相同时\n比较 $现期量/基期量$",
+                "side": "right",
+                "color": "#B7791F",
+                "collapsed": false,
+                "children": []
+              },
+              {
+                "id": "annual-average-rate-note",
+                "text": "年均增长率计算\n属于冷门考点",
+                "side": "right",
+                "color": "#B7791F",
+                "collapsed": false,
+                "children": []
+              }
+            ]
+          },
+          {
+            "id": "annual-average-years",
+            "text": "年份规则",
+            "side": "right",
+            "color": "#B7791F",
+            "collapsed": false,
+            "children": [
+              {
+                "id": "annual-years-normal",
+                "text": "常规：A 年至 B 年\nA 为基期，B 为现期\n年份差 = B − A",
+                "side": "right",
+                "color": "#B7791F",
+                "collapsed": false,
+                "children": []
+              },
+              {
+                "id": "annual-years-plan",
+                "text": "“十三五”\n2015 年为基期，2020 年为现期\n年份差为 5",
+                "side": "right",
+                "color": "#B7791F",
+                "collapsed": false,
+                "children": []
+              },
+              {
+                "id": "annual-years-jiangsu",
+                "text": "江苏省考/事业单位\n基期一律前推",
+                "side": "right",
+                "color": "#B7791F",
+                "collapsed": false,
+                "children": []
+              },
+              {
+                "id": "annual-years-specific",
+                "text": "“2012—2014 这三年”\n2011 为基期，2014 为现期，年份差 3\n旧时硬性规则，现在较少考",
+                "side": "right",
+                "color": "#B7791F",
                 "collapsed": false,
                 "children": []
               }
